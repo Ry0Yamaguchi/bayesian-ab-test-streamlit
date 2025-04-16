@@ -13,7 +13,7 @@ st.subheader("グループB")
 b_success = st.number_input("成功数 B", min_value=0, value=70)
 b_total = st.number_input("試行数 B", min_value=1, value=480)
 
-st.subheader("事前分布（Beta）")
+st.subheader("事前分布（Beta）事前のCVRが分からない場合はデフォルトのBe(1,1)でOKです")
 alpha_prior = st.number_input("α", min_value=0.1, value=1.0)
 beta_prior = st.number_input("β", min_value=0.1, value=1.0)
 
@@ -56,3 +56,5 @@ ax2.set_ylabel("Density")
 ax2.set_title("Lift Distribution")
 ax2.legend()
 st.pyplot(fig2)
+
+st.subheader("お問い合わせは山口まで")
