@@ -26,18 +26,28 @@ b_beta_post = b_total - b_success + beta_prior
 samples = 100_000
 a_samples = beta.rvs(a_alpha_post, a_beta_post, size=samples)
 b_samples = beta.rvs(b_alpha_post, b_beta_post, size=samples)
+lift_samples = (b_samples - a_samples) / a_samples
 
 p_b_better = np.mean(b_samples > a_samples)
-expected_lift = np.mean((b_samples - a_samples) / a_samples)
+expected_lift = np.mean(lift_samples)
 
 st.metric("BがAより優れている確率", f"{p_b_better:.2%}")
 st.metric("期待リフト率", f"{expected_lift:.2%}")
 
-fig, ax = plt.subplots()
-x = np.linspace(0, 0.3, 1000)
-ax.plot(x, beta.pdf(x, a_alpha_post, a_beta_post), label="Aの事後分布")
-ax.plot(x, beta.pdf(x, b_alpha_post, b_beta_post), label="Bの事後分布")
-ax.set_xlabel("コンバージョン率")
-ax.set_ylabel("確率密度")
-ax.legend()
-st.pyplot(fig)
+fig1, ax1 = plt.subplots()
+x = np.linspace(0, max(max(a_samples), max(b_samples)), 1000)
+ax1.plot(x, beta.pdf(x, a_alpha_post, a_beta_post), label="Aの事後分布")
+ax1.plot(x, beta.pdf(x, b_alpha_post, b_beta_post), label="Bの事後分布")
+ax1.set_xlabel("コンバージョン率")
+ax1.set_ylabel("確率密度")
+ax1.legend()
+st.pyplot(fig1)
+
+fig2, ax2 = plt.subplots()
+ax2.hist(lift_samples, bins=100, density=True, alpha=0.7)
+ax2.axvline(0, color='red', linestyle='--', label='Lift = 0')
+ax2.set_xlabel("相対リフト率 ((B - A) / A)")
+ax2.set_ylabel("確率密度")
+ax2.set_title("リフト分布")
+ax2.legend()
+st.pyplot(fig2)
