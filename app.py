@@ -57,4 +57,4 @@ ax2.set_title("Lift Distribution")
 ax2.legend()
 st.pyplot(fig2)
 
-st.subheader("お問い合わせは山口まで")
+
